@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+        <title>Mocking Spongebob Squarepants Text Generator</title>
+        <style type="text/css">
+textarea {
+    display:block;
+    width:400px;
+    height:10em;
+    margin:1em
+}
+#clipboard-success {
+    display:none;
+    font-weight:strong
+}
+        </style>
+
+    </head>
+    <body>
+        <h1>Mocking Spongebob Squarepants Text Generator</h1>
+
+        <h3>Type / paste your text here</h3>
+        <textarea id="in"></textarea>
+
+        <h3>Click your mocking text below to copy to your clipboard</h3>
+        <p id="clipboard-success">Copied, now paste into twitter/facebook/etc!</p>
+        <textarea id="out" readonly="true"></textarea>
+
+        <script language="javascript">
+var input = document.getElementById("in");
+var output = document.getElementById("out");
+
+function tweak (c) {
+    return Math.random() < 0.5 ? c.toLowerCase() : c.toUpperCase();
+}
+
+function mock (e) {
+    output.value = e.target.value.split("").map(tweak).join("");
+}
+
+function clipboard () {
+    output.select(); 
+    try {
+        if (document.execCommand('copy')) {
+            document.getElementById("clipboard-success").style.display = "block";
+            setTimeout(function () {
+                document.getElementById("clipboard-success").style.display = "none";
+            }, 3000)
+            return true;
+        }
+    } catch (e) {}
+}
+
+input.addEventListener('keyup', mock);
+output.addEventListener('click', clipboard);
+        </script>
+    </body>
+</html>
