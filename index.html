@@ -19,6 +19,14 @@ textarea {
     display:block;
     margin:1em 0px
 }
+#rows {
+    display:flex;
+    flex-direction:row;
+    flex-wrap:wrap
+}
+#rows > * {
+    margin-right:20px
+}
         </style>
 
         <link href="https://fonts.googleapis.com/css?family=Anton&amp;subset=latin-ext"
@@ -28,17 +36,24 @@ textarea {
     <body>
         <h1>MoCking sPOngEbOb sqUArepAnTs TexT gENeraTOR</h1>
 
-        <h3>Type / paste your text here</h3>
-        <textarea id="in"></textarea>
+        <div id="rows">
+            <div>
+                <h3>Type / paste your text here</h3>
+                <textarea id="in"></textarea>
 
-        <h3>Click your mocking text below to copy to your clipboard</h3>
-        <p id="clipboard-success">Copied, now paste into twitter/facebook/etc!</p>
-        <textarea id="out" readonly="true"></textarea>
+                <h3>Click your mocking text below to copy to your clipboard</h3>
+                <p id="clipboard-success">Copied, now paste into twitter/facebook/etc!</p>
+                <textarea id="out" readonly="true"></textarea>
+            </div>
+            <div>
+                <h3>Download/share your image</h3>
+                <a href="#" download="stoP-THAt-RiGHT-nOW.jpg" id="dl-btn">
+                    Download / Share Image
+                </a>
+                <canvas id="canvas"></canvas>
+            </div>
+        </div>
 
-        <h3>Download/share your image</h3>
-        <a href="#" download="stoP-THAt-RiGHT-nOW.jpg" id="dl-btn">
-            Download / Share Image
-        </a>
         <script language="javascript">
 var input = document.getElementById("in");
 var output = document.getElementById("out");
@@ -81,10 +96,9 @@ document.getElementById("dl-btn").addEventListener("click", function (e) {
     e.target.href = canvas.toDataURL("image/jpg");
 });
 
-var canvas = document.createElement("canvas");
+var canvas = document.getElementById("canvas");
 canvas.setAttribute("height", height);
 canvas.setAttribute("width", width);
-document.body.appendChild(canvas);
 var ctx = canvas.getContext('2d');
 ctx.fillStyle = "#FFF";
 ctx.strokeStyle = "#000";
