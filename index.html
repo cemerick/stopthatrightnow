@@ -15,7 +15,14 @@ textarea {
     display:none;
     font-weight:strong
 }
+#dl-btn {
+    display:block;
+    margin:1em 0px
+}
         </style>
+
+        <link href="https://fonts.googleapis.com/css?family=Anton&amp;subset=latin-ext"
+              rel="stylesheet">
 
     </head>
     <body>
@@ -28,17 +35,62 @@ textarea {
         <p id="clipboard-success">Copied, now paste into twitter/facebook/etc!</p>
         <textarea id="out" readonly="true"></textarea>
 
+        <h3>Download your image</h3>
+        <a href="#" download="stoP-THAt-RiGHT-nOW.jpg" id="dl-btn">Download Image</a>
         <script language="javascript">
 var input = document.getElementById("in");
 var output = document.getElementById("out");
+var img = new Image();
+var width = 583;
+var height = 411;
+var center = width / 2;
+var lineWidth = 2.5;
+var fontSize = 42;
 
 function tweak (c) {
     return Math.random() < 0.5 ? c.toLowerCase() : c.toUpperCase();
 }
 
-function mock (e) {
-    output.value = e.target.value.split("").map(tweak).join("");
+function mock (text) {
+    ctx.drawImage(img, 0, 0);
+    ctx.font = fontSize + "px Anton";
+    ctx.lineWidth = lineWidth;
+
+    text = output.value = text.split("").map(tweak).join("");
+
+    var m = text.match(/([^\n]+(?:\n[^\n]+)*)?(\n(?:\n[^\n]+)*)?/);
+    var top = m[1] ? m[1] : "";
+    var bottom = m[2] ? m[2] : "";
+
+    top.split("\n").map(function (line, lineno) {
+        // top margin + number of lines * char height incl. padding
+        var yoffset = 5 + ((1 + lineno) * (fontSize * 1.1));
+        ctx.fillText(line, center, yoffset, width - 10);
+        ctx.strokeText(line, center, yoffset, width - 10);
+    });
+    bottom.split("\n").reverse().map(function (line, lineno) {
+        var yoffset = height - 10 - (lineno * (fontSize * 1.1));
+        ctx.fillText(line, center, yoffset, width - 10);
+        ctx.strokeText(line, center, yoffset, width - 10);
+    });
 }
+
+document.getElementById("dl-btn").addEventListener("click", function (e) {
+    e.target.href = canvas.toDataURL("image/jpg");
+});
+
+var canvas = document.createElement("canvas");
+canvas.setAttribute("height", height);
+canvas.setAttribute("width", width);
+document.body.appendChild(canvas);
+var ctx = canvas.getContext('2d');
+ctx.fillStyle = "#FFF";
+ctx.strokeStyle = "#000";
+ctx.textAlign = "center";
+img.src = "meme.jpg";
+img.addEventListener("load", function (e) {
+    mock("");
+});
 
 function clipboard () {
     output.select(); 
@@ -53,7 +105,7 @@ function clipboard () {
     } catch (e) {}
 }
 
-input.addEventListener('keyup', mock);
+input.addEventListener('keyup', function (e) { mock(e.target.value); });
 output.addEventListener('click', clipboard);
         </script>
     </body>
